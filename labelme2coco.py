@@ -70,7 +70,8 @@ class labelme2coco(object):
         image['width'] = width
         image['id'] = num + 1
         #image['file_name'] = data['imagePath'].split('/')[-1]
-        image['file_name'] = data['imagePath'][3:14]
+        #image['file_name'] = data['imagePath'][3:14]
+        image['file_name'] = data['imagePath']
         self.height = height
         self.width = width
  
@@ -158,8 +159,10 @@ class labelme2coco(object):
         json.dump(self.data_coco, open(self.save_json_path, 'w'), indent=4, cls=MyEncoder)  # indent=4 更加美观显示
 
 
-labelme_json = glob.glob('./image/*.json')
+img_folder_path = "./configs/animal/catdog/train/*.json"
+labelme_json = glob.glob(img_folder_path)
 print(1)
 # labelme_json=['./Annotations/*.json']
 print(labelme_json)
-labelme2coco(labelme_json, './json/test.json')
+output_path = "./configs/animal/catdog/train/annotation_coco.json"
+labelme2coco(labelme_json, output_path)
