@@ -3,6 +3,7 @@ from matplotlib import pyplot as plt
 from mmdet.apis import init_detector, inference_detector
 import argparse
 import os
+import glob
 
 def main():
     parser = argparse.ArgumentParser()
@@ -17,16 +18,13 @@ def main():
     # init a detector
     model = init_detector(args.config, args.checkpoint, device=device)
 
-    for root, dirs, files in os.walk(args.image_folder_path):
-        for file in files:
-            img_path = os.path.join(root, file)
-            print(file)
-            # inference the demo image
-            detections = inference_detector(model, img_path)
-            print(detections)
-            name, type = file.split('.')[0], file.split('.')[1]
-            output_path = args.output_path + '/' + name + "_res" + '.' + type
-            model.show_result(img_path, detections, out_file=output_path)
+    images = glob.glob(os.path.join(args.image_folder_path, "*.jpeg")) + glob.glob(os.path.join(args.image_folder_path, "*.jpg"))
+    print(images)
+    for image in images:
+        detections = inference_detector(model, image)
+        name = image.split('/')[-1].split('.')[0]
+        output_path = args.output_path + '/' + name + "_res" + ".jpg"
+        model.show_result(image, detections, out_file=output_path)
 
 if __name__ == '__main__':
     main()

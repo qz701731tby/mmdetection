@@ -158,11 +158,15 @@ class labelme2coco(object):
         print(self.data_coco)
         json.dump(self.data_coco, open(self.save_json_path, 'w'), indent=4, cls=MyEncoder)  # indent=4 更加美观显示
 
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-j', '--json_folder_path', help='set json folder path')
+    parser.add_argument('-o', '--output_path', help='set output path')
+    args = parser.parse_args()
+    json_path = args.json_folder_path + "/*.json"
+    labelme_json = glob.glob(json_path)
+    print(labelme_json)
+    labelme2coco(labelme_json, args.output_path)
 
-img_folder_path = "./configs/animal/catdog/train/*.json"
-labelme_json = glob.glob(img_folder_path)
-print(1)
-# labelme_json=['./Annotations/*.json']
-print(labelme_json)
-output_path = "./configs/animal/catdog/train/annotation_coco.json"
-labelme2coco(labelme_json, output_path)
+if __name__ == '__main__':
+    main()
